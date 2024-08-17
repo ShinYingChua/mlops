@@ -1,0 +1,7 @@
+name: my-azureml-env
+dependencies:
+  - python=3.8
+  - scikit-learn
+  - joblib
+  - pip:
+    - azureml-sdk

@@ -1,0 +1,35 @@
+name: Azure ML Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run training script
+      run: |
+        python train.py
+
+    - name: Deploy model to Azure ML
+      env:
+        AZUREML_WORKSPACE: ${{ secrets.AZUREML_WORKSPACE }}
+        AZUREML_SUBSCRIPTION_ID: ${{ secrets.AZUREML_SUBSCRIPTION_ID }}
+        AZUREML_RESOURCE_GROUP: ${{ secrets.AZUREML_RESOURCE_GROUP }}
+      run: |
+        python deploy_model.py
