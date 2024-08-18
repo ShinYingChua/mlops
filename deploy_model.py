@@ -1,11 +1,29 @@
 from azureml.core import Workspace
 from azureml.core.model import Model
+from azureml.core.authentication import ServicePrincipalAuthentication
 from azureml.core.webservice import AksWebservice, Webservice
 from azureml.core.model import InferenceConfig
 import os
 
-# Connect to the Azure ML workspace
-ws = Workspace.from_config()
+# Fetch Service Principal credentials from environment variables
+subscription_id = os.getenv("AZUREML_SUBSCRIPTION_ID")
+resource_group = os.getenv("AZUREML_RESOURCE_GROUP")
+workspace_name = os.getenv("AZUREML_WORKSPACE_NAME")
+tenant_id = os.getenv("AZUREML_TENANT_ID")
+client_id = os.getenv("AZUREML_CLIENT_ID")
+client_secret = os.getenv("AZUREML_CLIENT_SECRET")
+
+# Set up Service Principal Authentication
+sp_auth = ServicePrincipalAuthentication(
+    tenant_id=tenant_id,
+    service_principal_id=client_id,
+    service_principal_password=client_secret
+)
+
+
+# Connect to Azure ML Workspace
+ws = Workspace(subscription_id=subscription_id, resource_group=resource_group,
+               workspace_name=workspace_name, auth=sp_auth)
 
 # Load the registered model
 model = Model(ws, name="iris_model")
