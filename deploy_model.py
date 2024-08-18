@@ -47,7 +47,7 @@ ws = Workspace(subscription_id=subscription_id, resource_group=resource_group,
                workspace_name=workspace_name, auth=sp_auth)
 
 # Attach the existing AKS cluster if not already attached
-aks_name = "my-aks-cluster"
+aks_name = "my-aks-cluster2"
 if aks_name not in ws.compute_targets:
     attach_config = AksCompute.attach_configuration(
         resource_group=resource_group, cluster_name=aks_name)
@@ -73,40 +73,6 @@ env = ws.environments['my-azureml-env']
 
 # Define the inference configuration
 inference_config = InferenceConfig(entry_script="score.py", environment=env)
-
-# Define the AKS deployment target
-aks_target = ws.compute_targets['my-aks-cluster']
-
-# Define the deployment configuration
-deployment_config = AksWebservice.deploy_configuration(
-    cpu_cores=1, memory_gb=1)
-
-# Deploy the model
-service = Model.deploy(
-    ws, "iris-service", [model], inference_config, deployment_config, aks_target)
-service.wait_for_deployment(show_output=True)
-
-
-# Create or retrieve the environment
-try:
-    env = ws.environments['my-azureml-env']
-except KeyError:
-    # If the environment doesn't exist, create it from the environment.yml file
-    env = Environment.from_conda_specification(
-        name='my-azureml-env', file_path='environment.yml')
-    env.register(workspace=ws)  # Register the environment in the workspace
-
-# Load the registered model
-model = Model(ws, name="iris_model")
-
-# Define the environment (use the same environment used during training)
-env = ws.environments['my-azureml-env']
-
-# Define the inference configuration
-inference_config = InferenceConfig(entry_script="score.py", environment=env)
-
-# Define the AKS deployment target
-aks_target = ws.compute_targets['my-aks-cluster']
 
 # Define the deployment configuration
 deployment_config = AksWebservice.deploy_configuration(
