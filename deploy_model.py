@@ -1,9 +1,8 @@
-from azureml.core import Workspace, Environment, Model
-from azureml.core.model import Model
+from azureml.core import Workspace, Environment, Model, ComputeTarget
+from azureml.core.compute import AksCompute
 from azureml.core.authentication import ServicePrincipalAuthentication
 from azureml.core.webservice import AksWebservice, Webservice
 from azureml.core.model import InferenceConfig
-from azureml.core.compute import AksCompute, ComputeTarget
 import os
 
 # Fetch Service Principal credentials from environment variables
@@ -50,15 +49,9 @@ ws = Workspace(subscription_id=subscription_id, resource_group=resource_group,
 # Attach the existing AKS cluster if not already attached
 aks_name = "my-aks-cluster"
 if aks_name not in ws.compute_targets:
-    aks_target = AksCompute.attach(
-        ws,
-        name=aks_name,
-        resource_id="/subscriptions/{subscription_id}/resourceGroups/{resource_group}/providers/Microsoft.ContainerService/managedClusters/{aks_name}".format(
-            subscription_id=subscription_id,
-            resource_group=resource_group,
-            aks_name=aks_name
-        )
-    )
+    attach_config = AksCompute.attach_configuration(
+        resource_group=resource_group, cluster_name=aks_name)
+    aks_target = ComputeTarget.attach(ws, aks_name, attach_config)
     aks_target.wait_for_completion(show_output=True)
 else:
     aks_target = ws.compute_targets[aks_name]
