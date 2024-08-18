@@ -32,5 +32,7 @@ jobs:
         AZUREML_TENANT_ID: ${{ secrets.AZUREML_TENANT_ID }}
         AZUREML_CLIENT_ID: ${{ secrets.AZUREML_CLIENT_ID }}
         AZUREML_CLIENT_SECRET: ${{ secrets.AZUREML_CLIENT_SECRET }}
+        AZUREML_RESOURCE_GROUP: ${{ secrets.AZUREML_RESOURCE_GROUP }}
+        AZUREML_WORKSPACE_NAME: ${{ secrets.AZUREML_WORKSPACE_NAME }}
       run: |
         python deploy_model.py
