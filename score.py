@@ -12,7 +12,7 @@ def init():
 def run(data):
     try:
         # Convert the incoming data to a NumPy array
-        data = np.array(data)
+        data = np.array(data['data'])
 
         # Check if the array is 1D and reshape it to 2D (1 sample with n features)
         if data.ndim == 1:
