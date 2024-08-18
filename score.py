@@ -1,6 +1,7 @@
 import joblib
 import numpy as np
 from azureml.core.model import Model
+import json
 
 
 def init():
@@ -11,6 +12,10 @@ def init():
 
 def run(data):
     try:
+        # Ensure that the raw_data is parsed correctly as a dictionary
+        if isinstance(raw_data, str):
+            raw_data = json.loads(raw_data)
+
         # Convert the incoming data to a NumPy array
         data = np.array(data['data'])
 
