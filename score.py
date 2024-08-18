@@ -3,6 +3,13 @@ import numpy as np
 from azureml.core.model import Model
 import json
 
+# Define a mapping from class labels to Iris flower names
+CLASS_LABELS = {
+    0: "Iris-setosa",
+    1: "Iris-versicolor",
+    2: "Iris-virginica"
+}
+
 
 def init():
     global model
@@ -24,8 +31,12 @@ def run(data):
             data = data.reshape(1, -1)
 
         # Predict using the model
-        result = model.predict(data)
-        return result.tolist()
+        class_labels = model.predict(data)
+
+        # Map the numeric class labels to their corresponding flower names
+        result = [CLASS_LABELS[label] for label in class_labels]
+
+        return result
     except Exception as e:
         error = str(e)
         return error
