@@ -1,4 +1,4 @@
-from azureml.core import Workspace
+from azureml.core import Workspace, Environment, Model
 from azureml.core.model import Model
 from azureml.core.authentication import ServicePrincipalAuthentication
 from azureml.core.webservice import AksWebservice, Webservice
@@ -24,6 +24,15 @@ sp_auth = ServicePrincipalAuthentication(
 # Connect to Azure ML Workspace
 ws = Workspace(subscription_id=subscription_id, resource_group=resource_group,
                workspace_name=workspace_name, auth=sp_auth)
+
+# Create or retrieve the environment
+try:
+    env = ws.environments['my-azureml-env']
+except KeyError:
+    # If the environment doesn't exist, create it from the environment.yml file
+    env = Environment.from_conda_specification(
+        name='my-azureml-env', file_path='environment.yml')
+    env.register(workspace=ws)  # Register the environment in the workspace
 
 # Load the registered model
 model = Model(ws, name="iris_model")
