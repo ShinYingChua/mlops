@@ -28,8 +28,9 @@ jobs:
 
     - name: Deploy model to Azure ML
       env:
-        AZUREML_WORKSPACE: ${{ secrets.AZUREML_WORKSPACE }}
         AZUREML_SUBSCRIPTION_ID: ${{ secrets.AZUREML_SUBSCRIPTION_ID }}
-        AZUREML_RESOURCE_GROUP: ${{ secrets.AZUREML_RESOURCE_GROUP }}
+        AZUREML_TENANT_ID: ${{ secrets.AZUREML_TENANT_ID }}
+        AZUREML_CLIENT_ID: ${{ secrets.AZUREML_CLIENT_ID }}
+        AZUREML_CLIENT_SECRET: ${{ secrets.AZUREML_CLIENT_SECRET }}
       run: |
         python deploy_model.py
