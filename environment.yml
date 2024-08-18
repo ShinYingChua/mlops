@@ -5,3 +5,6 @@ dependencies:
   - joblib
   - pip:
     - azureml-sdk
+    - azureml-inference-server-http
+  - apt:  # This section allows you to include system packages
+    - libtinfo6  # Ensure the correct version of libtinfo is installed
