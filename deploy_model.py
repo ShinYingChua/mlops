@@ -44,7 +44,7 @@ env = ws.environments['my-azureml-env']
 inference_config = InferenceConfig(entry_script="score.py", environment=env)
 
 # Define the AKS deployment target
-aks_target = AksWebservice(ws, "ml-compute")
+aks_target = AksWebservice(ws, "my-aks-cluster")
 
 # Define the deployment configuration
 deployment_config = AksWebservice.deploy_configuration(
