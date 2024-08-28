@@ -13,7 +13,7 @@ CLASS_LABELS = {
 
 def init():
     global model
-    model_path = Model.get_model_path("iris_model")
+    model_path = Model.get_model_path("iris-logistic-regression")
     model = joblib.load(model_path)
 
 
