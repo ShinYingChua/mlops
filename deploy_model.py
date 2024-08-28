@@ -25,27 +25,6 @@ sp_auth = ServicePrincipalAuthentication(
 ws = Workspace(subscription_id=subscription_id, resource_group=resource_group,
                workspace_name=workspace_name, auth=sp_auth)
 
-
-# Fetch Service Principal credentials from environment variables
-subscription_id = os.getenv("AZUREML_SUBSCRIPTION_ID")
-resource_group = os.getenv("AZUREML_RESOURCE_GROUP")
-workspace_name = os.getenv("AZUREML_WORKSPACE_NAME")
-tenant_id = os.getenv("AZUREML_TENANT_ID")
-client_id = os.getenv("AZUREML_CLIENT_ID")
-client_secret = os.getenv("AZUREML_CLIENT_SECRET")
-
-# Set up Service Principal Authentication
-sp_auth = ServicePrincipalAuthentication(
-    tenant_id=tenant_id,
-    service_principal_id=client_id,
-    service_principal_password=client_secret
-)
-
-
-# Connect to Azure ML Workspace
-ws = Workspace(subscription_id=subscription_id, resource_group=resource_group,
-               workspace_name=workspace_name, auth=sp_auth)
-
 # Attach the existing AKS cluster if not already attached
 aks_name = "my-aks-cluster2"
 if aks_name not in ws.compute_targets:
@@ -66,7 +45,7 @@ except KeyError:
     env.register(workspace=ws)  # Register the environment in the workspace
 
 # Load the registered model
-model = Model(ws, name="iris_model")
+model = Model(ws, name="iris-logistic-regression")
 
 # Define the environment (use the same environment used during training)
 env = ws.environments['my-azureml-env']
